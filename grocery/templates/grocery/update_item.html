@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+    Update List
+{% endblock  %}
+
+    {% block content %}
+        <h1>Update Grocery List</h1>
+       <form method="POST" action="{% url 'grocery.update' item.id %}">
+            <!-- Security token -->
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Item name</label>
+                <input type="text" name="itemname"   class="form-control" placeholder="Item name" value="{{item.name}}"/>
+            </div>
+            <div class="form-group">
+                <label>Item quantity</label>
+                <input type="text" name="quentity" class="form-control" placeholder="Item quantity" value="{{item.quantity}}"/>
+            </div>
+            <div class="form-group">
+                <label>Item status</label>
+                <select class="form-control" id="status" name="status">
+                    <option value="0">PENDING</option>
+                    <option value="1" >BOUGHT</option>
+                    <option value="2">NOT AVAILABLE</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input name="created_at" id="created_at" type="date" class="form-control" placeholder="Date"  value="">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-danger">
+            </div>
+        </form>
+
+    <script>
+    window.onload = (event) => {
+        document.getElementById("status").selectedIndex = "{{item.status}}";
+        document.getElementById("created_at").value = "{{item.created_at | date:'Y-m-d'}}";
+    };
+    </script>
+    {% endblock %}

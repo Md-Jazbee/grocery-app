@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}
+    View List
+{% endblock title %}
+
+    {% block content %}
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h1>View Grocery List</h1>
+            </div>
+            <div class="col-lg-6 float-right">
+                <form method="GET" action="{% url 'grocery.all' %}">
+                    <div class="row">
+                        <!-- Security token -->
+                        {% csrf_token %}
+                        <div class="col-lg-8">
+                            <!-- Date Filtering-->
+                            <input name="date" type="date" class="form-control">
+                        </div>
+                        <div class="col-lg-2">
+                            <input type="submit" class="btn btn-danger" value="filter">
+                        </div>
+                    </form>
+                    <div class="col-lg-2">
+                        <a class="" href="{% url 'logout' %}"> Log out </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <a href="{% url 'grocery.add' %}"> Add item </a>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            {% for grocery in grocery_list %}
+                <div class="col-lg-4 padding-15 ">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ grocery.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ grocery.quantity }}</h6>
+                            {% if grocery.status == 0 %}
+                               <p class="text-info">PENDING </p>
+                            {% elif grocery.status == 1 %}
+                                <p class="text-success">BOUGHT</p>
+                            {% else %}
+                                <p class="text-danger">NOT AVAILABLE</p>
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-lg-6 px-md-5">
+                                   <a href="{% url 'grocery.update'  grocery.id %}"> Update </a>
+                                </div>
+                                <div class="col-lg-6 px-md-5">
+                                   <a href="{% url 'grocery.delete'  grocery.id %}"> Delete </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endblock %}
